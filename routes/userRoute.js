@@ -20,6 +20,24 @@ router.get('/random',(req,res)=>{
 })
 
 router.get('/all',(req,res)=>{
+    const users=[]
+    if(req.body === ''){
+        fs.readFile('./data/data.json','Utf8',(err,info)=>{
+            if(err){
+                res.send('Error in fetching users data')
+            }else{
+                res.send(info)
+                users.push()
+            }
+        })
+    }else if(req.body){
+        res.send(req.body)
+    }
+
+    
+})
+router.get('/all/:number',(req,res)=>{
+    console.log(req.params)
    fs.readFile('./data/data.json','Utf8',(err,info)=>{
         if(err){
             res.send('Error in fetching users data')
@@ -88,6 +106,24 @@ router.patch('/update/:id',(req,res)=>{
     
 })
 
+router.delete('/delete/:id',(req,res)=>{
+    const id = req.params
+    const filteredUser = data.filter((user) => user.id !== parseInt(id.id))
+    fs.writeFile('./data/data.json',JSON.stringify(filteredUser),(err)=>{
+        if(err){
+            return res.send(err)
+        }
+    })
+    res.send({"message":"Update successful"})
+
+})
+
+
+
+
+
+
+
 
 
 
@@ -113,19 +149,5 @@ router.patch('/bulk-update',(req,res)=>{
 
 
 
-
-
-
-router.delete('/delete/:id',(req,res)=>{
-    const id = req.params
-    const filteredUser = data.filter((user) => user.id !== parseInt(id.id))
-    fs.writeFile('./data/data.json',JSON.stringify(filteredUser),(err)=>{
-        if(err){
-            return res.send(err)
-        }
-    })
-    res.send({"message":"Update successful"})
-
-})
 
 module.exports = router
